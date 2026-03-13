@@ -17,10 +17,6 @@ public class Items {
     private Date createdAt;
     private Date updatedAt;
 
-    private String categoryName;
-    private String locationName;
-    private String ownerFullName;
-
     public Items() {
     }
 
@@ -135,32 +131,10 @@ public class Items {
         this.updatedAt = updatedAt;
     }
 
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-    public String getOwnerFullName() {
-        return ownerFullName;
-    }
-
-    public void setOwnerFullName(String ownerFullName) {
-        this.ownerFullName = ownerFullName;
-    }
-
     @Override
     public String toString() {
-        return "Items{" + "itemId=" + itemId + ", userId=" + userId + ", categoryId=" + categoryId + ", locationId=" + locationId + ", title=" + title + ", description=" + description + ", type=" + type + ", status=" + status + ", imagesJSON=" + imagesJSON + ", dateIncident=" + dateIncident + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", categoryName=" + categoryName + ", locationName=" + locationName + ", ownerFullName=" + ownerFullName + '}';
+        return "Items{" + "itemId=" + itemId + ", userId=" + userId + ", categoryId=" + categoryId + ", locationId=" + locationId + ", title=" + title + ", description=" + description + ", type=" + type + ", status=" + status + ", imagesJSON=" + imagesJSON + ", dateIncident=" + dateIncident + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
+
+   
 }

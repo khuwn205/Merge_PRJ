@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import java.io.IOException;
@@ -20,34 +19,37 @@ import jakarta.servlet.http.HttpSession;
  * @author HungKNHE194779
  */
 public class loginController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loginController</title>");  
+            out.println("<title>Servlet loginController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loginController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet loginController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -55,20 +57,21 @@ public class loginController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-            HttpSession session = request.getSession(false);
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
 
-    if (session != null && session.getAttribute("currentUser") != null) {
-        response.sendRedirect("home");
-        return;
-    }
+        if (session != null && session.getAttribute("currentUser") != null) {
+            response.sendRedirect("home.jsp");
+            return;
+        }
 
         request.getRequestDispatcher("login.jsp").forward(request, response);
 
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -85,23 +88,32 @@ public class loginController extends HttpServlet {
         Users loggedInUser = dao.checkLogin(username, password);
 
         if (loggedInUser != null) {
-
+            // 1. Tạo session và lưu thông tin người dùng
             HttpSession session = request.getSession();
-
             session.setAttribute("currentUser", loggedInUser);
-
             session.setAttribute("userRole", loggedInUser.getRole());
 
-            response.sendRedirect("home");
+            // 2. Nếu là Admin, thực hiện lấy dữ liệu thống kê
+            if (loggedInUser.getRole().equalsIgnoreCase("admin")) {
+                int totalUsers = dao.getTotalUsers();
+                int totalLostItems = dao.getTotalLostItems();
+
+                // Đưa dữ liệu vào request để hiển thị trên home.jsp
+                request.setAttribute("totalUsers", totalUsers);
+                request.setAttribute("totalLostItems", totalLostItems);
+            }
+
+            // 3. Sử dụng Forward để giữ các attribute đã set ở trên
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Sai tài khoản hoặc mật khẩu!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
-
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
